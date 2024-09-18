@@ -21,8 +21,8 @@ export default function LoginScreen() {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-      <Image source={require('C:/Users/burak.demir/RNProjects/onyuzAkomays/assets/akom.png')} />
-        <Text style={styles.title}>AKOMAYS</Text>
+      <Image source={require('C:/Users/burak.demir/RNProjects/onyuzAkomays/assets/akomays.png')}
+      />
       </View>
 
       <View style={styles.form}>
@@ -79,7 +79,26 @@ export default function LoginScreen() {
         >
           <Text style={styles.buttonText}>GİRİŞ</Text>
         </Ripple>
+
+        {/* Logolar */}
+        <View style={styles.logoContainer}>
+          <Image
+            source={require('C:/Users/burak.demir/RNProjects/onyuzAkomays/assets/ibb-mavi-logo.jpg')}
+            style={styles.logo}
+            resizeMode="contain"
+          />
+          <Image
+            source={require('C:/Users/burak.demir/RNProjects/onyuzAkomays/assets/akomkucuk.png')}
+            style={styles.logo2}
+            resizeMode="contain"
+          />
+        </View>
+        {/* <View style={{flexDirection: 'row'}}>
+          <Image source={require('../assets/ibb-mavi-logo.jpg')} style={styles.icon} resizeMode='center' />
+          <Image source={require('../assets/ibb-mavi-logo.jpg')} style={styles.icon} resizeMode='center' />
+        </View> */}
       </View>
+
     </View>
   );
 }
@@ -160,6 +179,22 @@ const styles = StyleSheet.create({
   checkboxContainer: {
     flexDirection: 'row',
     alignItems: 'center',
+  },
+  logoContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    marginTop: 50,
+  },
+  logo: {
+    width: 50,
+    height: 50,
+    padding: 50,
+  },
+  logo2: {
+    width: 50,
+    height: 50,
+    padding: 50,
   },
 });
 

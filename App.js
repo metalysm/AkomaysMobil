@@ -1,10 +1,11 @@
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import { createDrawerNavigator } from '@react-navigation/drawer';
+// import { createDrawerNavigator } from '@react-navigation/drawer';
 import MainScreen from './screens/MainScreen';
 import LoginScreen from './screens/LoginScreen';
 import SettingScreen from './screens/SettingScreen';
+import StatisticsScreen from './screens/StatisticsScreen'
 
 const Stack = createStackNavigator();
 // const Drawer = createDrawerNavigator();
@@ -40,6 +41,8 @@ export default function App() {
       <Stack.Navigator initialRouteName="Login" screenOptions={{ headerShown: false }}>
         <Stack.Screen name="Login" component={LoginScreen} />
         <Stack.Screen name="Home" component={MainScreen} />
+        <Stack.Screen name="Settings" component={SettingScreen} />
+        <Stack.Screen name="Stats" component={StatisticsScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );

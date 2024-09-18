@@ -1,18 +1,26 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, Dimensions, TouchableOpacity, Image, Text } from 'react-native';
+import { View, StyleSheet, Dimensions, TouchableOpacity, Image, Text, Modal, ScrollView } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { useNavigation } from '@react-navigation/native';
 
 export default function MainScreen() {
+    // sayfalar arası geçiş
     const navigation = useNavigation();
 
+    // alt menüler için tanımlama
     const [showSubMenu, setShowSubMenu] = useState(false);
     const [showSubMenu2, setShowSubMenu2] = useState(false);
     const [showSubMenu3, setShowSubMenu3] = useState(false);
+    const [showSubMenu4, setShowSubMenu4] = useState(false);
 
-    const [showMenu, setShowMenu] = useState(false); // soldan menü açma
+    const [showLineMenu, setShowLineMenu] = useState(false);
 
+    const [showActiveList, setShowActiveList] = useState(false);
+    const [showYolBakim, setShowYolBakim] = useState(false);
+    const [showSonDepremler, setShowSonDepremler] = useState(false);
+
+    // harita ilk ayarı
     const [region, setRegion] = useState({
         latitude: 41.0082,
         longitude: 28.9784,
@@ -20,6 +28,7 @@ export default function MainScreen() {
         longitudeDelta: 0.0421,
     });
 
+    // alt menü düzenleme
     const handlePressHarita = () => {
         setShowSubMenu(!showSubMenu);
     };
@@ -32,6 +41,29 @@ export default function MainScreen() {
         setShowSubMenu3(!showSubMenu3);
     };
 
+    const handlePressKatmanlar = () => {
+        setShowSubMenu4(!showSubMenu4);
+    };
+
+    // sol menü
+    const handleLineMenu = () => {
+        setShowLineMenu(!showLineMenu);
+    };
+
+    // Aktif olay liste
+    const handleActiveList = () => {
+        setShowActiveList(!showActiveList);
+    };
+
+    const handleYolBakim = () => {
+        setShowYolBakim(!showYolBakim);
+    };
+
+    const handleSonDepremler = () => {
+        setShowSonDepremler(!showSonDepremler);
+    };
+
+    // haritada yakınlaşma uzaklaşma
     const zoomIn = () => {
         setRegion((prevRegion) => ({
             ...prevRegion,
@@ -48,40 +80,61 @@ export default function MainScreen() {
         }));
     };
 
-    const toggleMenu = () => {
-        setShowMenu(!showMenu);
-    };
-
+    // sayfa düzeni
     return (
         <View style={styles.container}>
+            
+            {/* Üst Taraf */}
             <View style={styles.topBar}>
-                <TouchableOpacity
-                    style={styles.topMenuButton}
-                    onPress={toggleMenu}
-                >
+                <TouchableOpacity style={styles.topMenuButton} onPress={handleLineMenu}>
+                {/* <TouchableOpacity style={styles.topMenuButton}> */}
                     <Icon name="bars" size={30} color="#000" />
                 </TouchableOpacity>
-                {/* <TouchableOpacity style={styles.topMenuButton}>
-                    <Icon name="bars" size={30} color="#000" />
-                </TouchableOpacity> */}
 
-                {/* <Image source={require('../assets/akomkucuk.png')} /> */}
-                <Text style={styles.topMenuText}> AKOMAYS </Text>
+                <Image source={require('../assets/akomayskucuk.png')} />
+                {/* <Text style={styles.topMenuText}> AKOMAYS </Text> */}
 
                 <TouchableOpacity style={styles.profileButton}>
                     <Icon name="user" size={30} color="#000" />
                 </TouchableOpacity>
             </View>
+
+            {/* Harita Arka Planı */}
             <MapView
                 style={styles.map}
                 region={region}
-            // onRegionChangeComplete={setRegion}
             >
                 <Marker
                     coordinate={{ latitude: 41.0082, longitude: 28.9784 }}
                     title="Istanbul"
                 />
             </MapView>
+
+            {/* Menü Modal */}
+            <Modal
+                visible={showLineMenu}
+                transparent={true}
+                animationType="slide"
+                onRequestClose={() => setShowLineMenu(false)}
+            >
+                <View style={styles.menuContainer}>
+                    <TouchableOpacity style={styles.menuItem} onPress={() => {
+                        setShowLineMenu(false);
+                        navigation.navigate('Settings');
+                    }}>
+                        <Text style={styles.menuText}>Ayarlar</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.menuItem} onPress={() => {
+                        setShowLineMenu(false);
+                        navigation.navigate('Stats');
+                    }}>
+                        <Text style={styles.menuText}>İstatistikler</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.closeButton} onPress={handleLineMenu}>
+                        <Text style={styles.closeButtonText}>Kapat</Text>
+                    </TouchableOpacity>
+                </View>
+            </Modal>
 
             {/* Zoom Butonları */}
             <View style={styles.zoomContainer}>
@@ -94,7 +147,7 @@ export default function MainScreen() {
                 </TouchableOpacity>
             </View>
 
-            {/* Ana Butonlar */}
+            {/* Sol Ana Butonlar */}
             <View style={styles.buttonContainer}>
                 <TouchableOpacity style={styles.button} onPress={handlePressHarita}>
                     <Image source={require('../assets/traffic.png')} style={styles.icon} />
@@ -106,7 +159,7 @@ export default function MainScreen() {
                     <Text style={styles.text}>Kamera</Text>
                 </TouchableOpacity>
 
-                <TouchableOpacity style={styles.button} onPress={handlePressHarita}>
+                <TouchableOpacity style={styles.button} onPress={handleSonDepremler}>
                     <Image source={require('../assets/earthquake.png')} style={styles.icon} />
                     <Text style={styles.text}>Son Depremler</Text>
                 </TouchableOpacity>
@@ -117,6 +170,7 @@ export default function MainScreen() {
                 </TouchableOpacity>
             </View>
 
+            {/* Alt Ana Butonlar */}
             <View style={styles.buttonContainer2}>
                 <TouchableOpacity style={styles.button2} onPress={handlePressOlayYonetimi}>
                     <Image source={require('../assets/olay-yönetimi.png')} style={styles.icon} />
@@ -127,7 +181,8 @@ export default function MainScreen() {
                     <Image source={require('../assets/meteoroloji.png')} style={styles.icon} />
                     <Text style={styles.text}>Meteoroloji</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.button2} onPress={handlePressMeteoroloji}>
+
+                <TouchableOpacity style={styles.button2} onPress={handlePressKatmanlar}>
                     <Image source={require('../assets/layers.png')} style={styles.icon} />
                     <Text style={styles.text}>Katmanlar</Text>
                 </TouchableOpacity>
@@ -136,7 +191,7 @@ export default function MainScreen() {
             {/* Olay Yönetimi Alt Menüleri */}
             {showSubMenu2 && (
                 <View style={styles.subMenuContainer}>
-                    <TouchableOpacity style={styles.subMenuButton}>
+                    <TouchableOpacity style={styles.subMenuButton} onPress={handleActiveList}>
                         <Text style={styles.text}>Aktif Olay Listesi</Text>
                         <Image source={require('../assets/aktif-olay.png')} style={styles.icon} />
                     </TouchableOpacity>
@@ -175,11 +230,118 @@ export default function MainScreen() {
                     </TouchableOpacity>
                 </View>
             )}
+            {/* Katmanlar Alt Menüleri */}
+            {showSubMenu4 && (
+                <View style={styles.subMenuContainer}>
+                    <ScrollView horizontal={true} style={styles.scrollContainer2}>
+                        <View style={styles.rowContainer}>
+                            <TouchableOpacity style={styles.subMenuButton}>
+                                <Text style={styles.text}>İtfaiye</Text>
+                                {/* <Image source={require('../assets/radar.png')} style={styles.icon} /> */}
+                            </TouchableOpacity>
+                            <TouchableOpacity style={styles.subMenuButton} onPress={handleYolBakim}>
+                                <Text style={styles.text}>Yol Bakım</Text>
+                                {/* <Image source={require('../assets/station.png')} style={styles.icon} /> */}
+                            </TouchableOpacity>
+                            <TouchableOpacity style={styles.subMenuButton}>
+                                <Text style={styles.text}>İSKİ</Text>
+                                {/* <Image source={require('../assets/sms.png')} style={styles.icon} /> */}
+                            </TouchableOpacity>
+                            <TouchableOpacity style={styles.subMenuButton}>
+                                <Text style={styles.text}>İlçe Sınırları</Text>
+                                {/* <Image source={require('../assets/riskli-noktalar.png')} style={styles.icon} /> */}
+                            </TouchableOpacity>
+                            <TouchableOpacity style={styles.subMenuButton}>
+                                <Text style={styles.text}>Ulaşım</Text>
+                                {/* <Image source={require('../assets/riskli-noktalar.png')} style={styles.icon} /> */}
+                            </TouchableOpacity>
+                            <TouchableOpacity style={styles.subMenuButton}>
+                                <Text style={styles.text}>Ulaşım</Text>
+                                {/* <Image source={require('../assets/riskli-noktalar.png')} style={styles.icon} /> */}
+                            </TouchableOpacity>
+                            <TouchableOpacity style={styles.subMenuButton}>
+                                <Text style={styles.text}>Ulaşım</Text>
+                                {/* <Image source={require('../assets/riskli-noktalar.png')} style={styles.icon} /> */}
+                            </TouchableOpacity>
+                        </View>
+                    </ScrollView>
+                </View>
+            )}
+
+            {/* Aktif Olay Liste */}
+            {showActiveList && (
+                <View style={styles.subMenuContainer2}>
+                    <TouchableOpacity style={styles.closeButton2} onPress={() => setShowActiveList(false)}>
+                        <Icon name="chevron-down" size={20}/>
+                    </TouchableOpacity>
+                    <Text style={styles.listTitle}>Aktif Olay Listesi</Text>
+                    <ScrollView style={styles.scrollContainer}>
+                        <TouchableOpacity style={styles.listItem}>
+                            <Text style={styles.listText}>1. Olay: Kuvvetli Sağanak Yağış</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.listItem}>
+                            <Text style={styles.listText}>2. Olay: Yangın</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.listItem}>
+                            <Text style={styles.listText}>3. Olay: Deprem</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.listItem}>
+                            <Text style={styles.listText}>4.Olay</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.listItem}>
+                            <Text style={styles.listText}>5.Olay</Text>
+                        </TouchableOpacity>
+                    </ScrollView>
+                </View>
+            )}
+            {/* Yol Bakım */}
+            {showYolBakim && (
+                <View style={styles.subMenuContainer3}>
+                    <TouchableOpacity style={styles.subMenuButton}>
+                        <Text style={styles.text}>Sorumluluk Alanları</Text>
+                        {/* <Image source={require('../assets/radar.png')} style={styles.icon} /> */}
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.subMenuButton}>
+                        <Text style={styles.text}>İstasyonlar</Text>
+                        {/* <Image source={require('../assets/station.png')} style={styles.icon} /> */}
+                    </TouchableOpacity>
+                </View>
+            )}
+
+            {showSonDepremler && (
+                <View style={styles.subMenuContainer2}>
+                    <TouchableOpacity style={styles.closeButton2} onPress={() => setShowSonDepremler(false)}>
+                        <Icon name="chevron-down" size={20}/>
+                    </TouchableOpacity>
+                    <Text style={styles.listTitle}>Son Depremler</Text>
+                    <ScrollView style={styles.scrollContainer}>
+                        <TouchableOpacity style={styles.listItem}>
+                            <Text style={styles.listText}>Ankara Keşan  Büyüklük : 3.7</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.listItem}>
+                            <Text style={styles.listText}>Adıyaman      Büyüklük : 2.2</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.listItem}>
+                            <Text style={styles.listText}>İstanbul      Büyüklük : 3.2</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.listItem}>
+                            <Text style={styles.listText}>Manisa        Büyüklük : 4.3</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.listItem}>
+                            <Text style={styles.listText}>Yozgat        Büyüklük : 3.5</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.listItem}>
+                            <Text style={styles.listText}>İzmir         Büyüklük : 4.2</Text>
+                        </TouchableOpacity>
+                    </ScrollView>
+                </View>
+            )}
         </View>
     );
 
 }
 
+// stiller
 const styles = StyleSheet.create({
     container: {
         flex: 1,
@@ -224,7 +386,7 @@ const styles = StyleSheet.create({
         left: 50,
         right: 50,
         flexDirection: 'row',
-        justifyContent: 'space-between', // Butonlar arası eşit mesafe
+        justifyContent: 'space-between',
     },
     button: {
         backgroundColor: '#fff',
@@ -259,7 +421,7 @@ const styles = StyleSheet.create({
     },
     subMenuContainer: {
         position: 'absolute',
-        bottom: 150,
+        bottom: 110,
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
@@ -275,16 +437,6 @@ const styles = StyleSheet.create({
         width: 100,
         height: 70,
         elevation: 5, // Android shadow
-    },
-    headerContainer: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        // marginTop: 50,
-        paddingTop: 50, // iOS cihazlarda boşluk için
-        paddingHorizontal: 20,
-        backgroundColor: '#fff',
-        height: 100,
     },
     topMenuButton: {
         padding: 10,
@@ -309,5 +461,109 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         fontSize: 35,
         color: 'blue',
+    },
+    menuContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'rgba(0, 0, 0, 0.78)', // Arka plan şeffaf
+        width: '52%',
+    },
+    menuItem: {
+        backgroundColor: '#fff',
+        padding: 15,
+        marginBottom: 10,
+        borderRadius: 10,
+        width: 200,
+        alignItems: 'center',
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.5,
+        shadowRadius: 3,
+        elevation: 5,
+    },
+    menuText: {
+        fontSize: 18,
+        fontWeight: 'bold',
+        color: '#333',
+    },
+    closeButton: {
+        marginTop: 30,
+        padding: 10,
+        backgroundColor: '#ff5e5e',
+        alignItems: 'center',
+        borderRadius: 5,
+    },
+    closeButtonText: {
+        color: '#fff',
+        fontSize: 16,
+    },
+    menuItem2: { //kullanılmıyor şu an
+        // position: 'absolute',
+        backgroundColor: '#fff',
+        padding: 15,
+        marginBottom: 10,
+        borderRadius: 10,
+        width: 100,
+        alignItems: 'center',
+        // shadowColor: '#000',
+        // shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.5,
+        shadowRadius: 3,
+        elevation: 5,
+    },
+    listTitle: {
+        fontSize: 18,
+        fontWeight: 'bold',
+        marginBottom: 10,
+        textAlign: 'center',
+    },
+    subMenuContainer2: {
+        position: 'absolute',
+        bottom: 188,
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+        width: '100%',
+        backgroundColor: '#f0f8ff',
+    },
+    closeButton2: {
+        padding: 2,
+        backgroundColor: '#f0f8ff',
+        alignItems: 'center',
+        borderRadius: 5,
+        width: 30,
+    },
+    scrollContainer: {
+        maxHeight: 300, // Listeyi sınırlamak için (kaydırılabilir alan)
+        width: 400,
+        backgroundColor: '#f0f8ff',
+        padding: 10,
+    },
+    scrollContainer2 : {
+        // flexDirection: 'row',
+        padding: 10,
+    },
+    listItem: {
+        padding: 18,
+        backgroundColor: '#fff',
+        marginBottom: 10,
+        borderRadius: 5,
+        elevation: 3, // Android için gölge
+    },
+    listText: {
+        fontSize: 16,
+    },
+    subMenuContainer3: {
+        position: 'absolute',
+        bottom: 206,
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+        width: '100%',
+    },
+    rowContainer: {
+        flexDirection: 'row',
+        flexWrap: 'wrap', 
     },
 });
