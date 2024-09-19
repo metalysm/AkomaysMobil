@@ -3,7 +3,6 @@ import { View, StyleSheet, Dimensions, TouchableOpacity, Image, Text, Modal, Scr
 import MapView, { Marker } from 'react-native-maps';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { useNavigation } from '@react-navigation/native';
-import { MaterialIcons } from '@expo/vector-icons';
 
 export default function MainScreen() {
     // sayfalar arası geçiş
@@ -118,7 +117,9 @@ export default function MainScreen() {
                 <Image source={require('../assets/akomayskucuk.png')} style = {{width: 200, height: 70}} />
                 {/* <Text style={styles.topMenuText}> AKOMAYS </Text> */}
 
-                <TouchableOpacity style={styles.profileButton}>
+                <TouchableOpacity style={styles.profileButton} onPress={() => {
+                        navigation.navigate('Profile');
+                    }}>
                     <Icon name="user" size={30} color="#000" />
                 </TouchableOpacity>
             </View>
@@ -338,7 +339,7 @@ export default function MainScreen() {
                     </TouchableOpacity>
                 </View>
             )}
-
+            {/* Son Depremler */}  
             {showSonDepremler && (
                 <View style={styles.subMenuContainer2}>
                     <TouchableOpacity style={styles.closeButton2} onPress={() => setShowSonDepremler(false)}>
@@ -551,12 +552,13 @@ const styles = StyleSheet.create({
     },
     subMenuContainer2: {
         position: 'absolute',
-        bottom: 188,
+        bottom: 105,
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
         width: '100%',
-        backgroundColor: '#f0f8ff',
+        backgroundColor: '#dcdcdc',
+        borderRadius: 11,
     },
     closeButton2: {
         padding: 2,
@@ -566,9 +568,9 @@ const styles = StyleSheet.create({
         width: 30,
     },
     scrollContainer: {
-        maxHeight: 300, // Listeyi sınırlamak için (kaydırılabilir alan)
+        maxHeight: 333, // Listeyi sınırlamak için (kaydırılabilir alan)
         width: 400,
-        backgroundColor: '#f0f8ff',
+        backgroundColor: '#dcdcdc',
         padding: 10,
     },
     scrollContainer2: {
