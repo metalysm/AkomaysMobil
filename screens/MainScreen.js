@@ -5,7 +5,6 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import { useNavigation } from '@react-navigation/native';
 
 export default function MainScreen() {
-    // sayfalar arası geçiş
     const navigation = useNavigation();
 
     // alt menüler için tanımlama
@@ -74,14 +73,17 @@ export default function MainScreen() {
         setShowActiveList(!showActiveList);
     };
 
+    // Yol Bakım menüsü
     const handleYolBakim = () => {
         setShowYolBakim(!showYolBakim);
     };
 
+    // son deprem menüsü
     const handleSonDepremler = () => {
         setShowSonDepremler(!showSonDepremler);
     };
 
+    // trafik kamerası görünümü
     const handleShowCameras = () => {
         setShowCameras(!showCameras);
     };
@@ -110,12 +112,10 @@ export default function MainScreen() {
             {/* Üst Taraf */}
             <View style={styles.topBar}>
                 <TouchableOpacity style={styles.topMenuButton} onPress={handleLineMenu}>
-                    {/* <TouchableOpacity style={styles.topMenuButton}> */}
                     <Icon name="bars" size={30} color="#000" />
                 </TouchableOpacity>
 
                 <Image source={require('../assets/akomayskucuk.png')} style = {{width: 200, height: 70}} />
-                {/* <Text style={styles.topMenuText}> AKOMAYS </Text> */}
 
                 <TouchableOpacity style={styles.profileButton} onPress={() => {
                         navigation.navigate('Profile');
@@ -155,12 +155,14 @@ export default function MainScreen() {
                     }}>
                         <Text style={styles.menuText}>Ayarlar</Text>
                     </TouchableOpacity>
+
                     <TouchableOpacity style={styles.menuItem} onPress={() => {
                         setShowLineMenu(false);
                         navigation.navigate('Stats');
                     }}>
                         <Text style={styles.menuText}>İstatistikler</Text>
                     </TouchableOpacity>
+
                     <TouchableOpacity style={styles.closeButton} onPress={handleLineMenu}>
                         <Text style={styles.closeButtonText}>Kapat</Text>
                     </TouchableOpacity>
@@ -190,22 +192,18 @@ export default function MainScreen() {
             <View style={styles.buttonContainer}>
                 <TouchableOpacity style={styles.zoomButton} onPress={handlePressHarita}>
                     <Image source={require('../assets/traffic.png')} style={{ width: 30, height: 30 }} />
-                    {/* <Text style={styles.text}>Trafik Yoğunluğu</Text> */}
                 </TouchableOpacity>
 
                 <TouchableOpacity style={styles.zoomButton} onPress={handleShowCameras}>
                     <Image source={require('../assets/kucukkamera.png')} style={{ width: 30, height: 30 }} />
-                    {/* <Text style={styles.text}>Kamera</Text> */}
                 </TouchableOpacity>
 
                 <TouchableOpacity style={styles.zoomButton} onPress={handleSonDepremler}>
                     <Image source={require('../assets/earthquake.png')} style={{ width: 30, height: 30 }} />
-                    {/* <Text style={styles.text}>Son Depremler</Text> */}
                 </TouchableOpacity>
 
                 <TouchableOpacity style={styles.zoomButton} onPress={handlePressHarita}>
                     <Image source={require('../assets/arvento.png')} style={{ width: 30, height: 30 }} />
-                    {/* <Text style={styles.text}>Araç Takip</Text> */}
                 </TouchableOpacity>
             </View>
 
@@ -399,10 +397,6 @@ const styles = StyleSheet.create({
         height: 50,
         elevation: 5, // Android shadow
     },
-    zoomText: {
-        fontSize: 24,
-        fontWeight: 'bold',
-    },
     buttonContainer: {
         position: 'absolute',
         bottom: 50,
@@ -419,17 +413,6 @@ const styles = StyleSheet.create({
         right: 50,
         flexDirection: 'row',
         justifyContent: 'space-between',
-    },
-    button: {
-        backgroundColor: '#fff',
-        padding: 10,
-        borderRadius: 10,
-        marginBottom: 10,
-        alignItems: 'center',
-        justifyContent: 'center',
-        width: (Dimensions.get('window').width - 120) / 5,
-        height: 60,
-        elevation: 5, // Android shadow
     },
     button2: {
         backgroundColor: '#fff',
@@ -473,10 +456,6 @@ const styles = StyleSheet.create({
     topMenuButton: {
         padding: 10,
     },
-    logo: {
-        width: 100,
-        height: 50,
-    },
     profileButton: {
         padding: 10,
     },
@@ -488,11 +467,6 @@ const styles = StyleSheet.create({
         marginTop: 25,
         backgroundColor: '#f8f8f8',
         height: 80,
-    },
-    topMenuText: {
-        fontWeight: 'bold',
-        fontSize: 35,
-        color: 'blue',
     },
     menuContainer: {
         flex: 1,
@@ -529,20 +503,6 @@ const styles = StyleSheet.create({
     closeButtonText: {
         color: '#fff',
         fontSize: 16,
-    },
-    menuItem2: { //kullanılmıyor şu an
-        // position: 'absolute',
-        backgroundColor: '#fff',
-        padding: 15,
-        marginBottom: 10,
-        borderRadius: 10,
-        width: 100,
-        alignItems: 'center',
-        // shadowColor: '#000',
-        // shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.5,
-        shadowRadius: 3,
-        elevation: 5,
     },
     listTitle: {
         fontSize: 18,
